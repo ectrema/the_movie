@@ -21,4 +21,10 @@ class MovieRepositoryImpl implements MovieRepository {
   Future<void> addToFavorite(bool favorite, int mediaId) {
     return _movieRemoteDataSource.addToFavorite(favorite, mediaId);
   }
+
+  @override
+  Future<ResultEntity> getFavoriteMovie() async {
+    final ResultModel model = await _movieRemoteDataSource.getFavoriteMovie();
+    return model.toEntity;
+  }
 }

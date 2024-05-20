@@ -21,4 +21,9 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
       body: AddFavoriteBody(favorite: favorite, mediaId: mediaId),
     );
   }
+
+  @override
+  Future<ResultModel> getFavoriteMovie() {
+    return _movieEndpoint.getFavoriteMovie();
+  }
 }

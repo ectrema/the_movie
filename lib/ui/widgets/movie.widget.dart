@@ -84,11 +84,12 @@ class MovieWidget extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 4),
+                    padding: const EdgeInsets.only(top: 4, right: 8, bottom: 4),
                     child: Text(
                       item.overview ?? '',
                       maxLines: 4,
                       overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.justify,
                     ),
                   ),
                 ],

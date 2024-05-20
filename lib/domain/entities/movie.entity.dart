@@ -48,8 +48,6 @@ class MovieEntity with EquatableMixin {
         releaseDate,
         title,
         video,
-        voteAverage,
-        voteCount,
       ];
 }
 

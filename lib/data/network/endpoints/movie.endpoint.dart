@@ -21,8 +21,12 @@ abstract class MovieEndpoint {
 
   @GET('/discover/movie')
   Future<ResultModel> getMovie({
-    @Query('language') String language = 'fr_FR',
     @Query('page') int page = 1,
+  });
+
+  @GET('/account/{account_id}/favorite/movies')
+  Future<ResultModel> getFavoriteMovie({
+    @Path('account_id') int accountId = const int.fromEnvironment('ACCOUNT_ID'),
   });
 
   /// no endpoint to get account_id, so I set it with env file

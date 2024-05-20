@@ -19,15 +19,9 @@ class _MovieEndpoint implements MovieEndpoint {
   String? baseUrl;
 
   @override
-  Future<ResultModel> getMovie({
-    String language = 'fr_FR',
-    int page = 1,
-  }) async {
+  Future<ResultModel> getMovie({int page = 1}) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{
-      r'language': language,
-      r'page': page,
-    };
+    final queryParameters = <String, dynamic>{r'page': page};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _result = await _dio
@@ -39,6 +33,34 @@ class _MovieEndpoint implements MovieEndpoint {
             .compose(
               _dio.options,
               '/discover/movie',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = ResultModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<ResultModel> getFavoriteMovie(
+      {int accountId = const int.fromEnvironment('ACCOUNT_ID')}) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<ResultModel>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/account/${accountId}/favorite/movies',
               queryParameters: queryParameters,
               data: _data,
             )
