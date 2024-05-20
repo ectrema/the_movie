@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:the_movie/application/injections/initializer.dart';
 import 'package:the_movie/domain/entities/movie.entity.dart';
 import 'package:the_movie/domain/entities/result.entity.dart';
+import 'package:the_movie/domain/mixins/favorite.mixin.dart';
 import 'package:the_movie/domain/repository/movie.repository.dart';
 import 'package:the_movie/domain/services/favorite.service.dart';
 import 'package:the_movie/ui/abstraction/view_model_abs.dart';
@@ -17,7 +18,8 @@ final StateNotifierProvider<HomeViewModel, HomeState> homeProvider =
   ),
 );
 
-class HomeViewModel extends ViewModelAbs<HomeViewModel, HomeState> {
+class HomeViewModel extends ViewModelAbs<HomeViewModel, HomeState>
+    with FavoriteMixin {
   final MovieRepository _movieRepository;
 
   final FavoriteService _favoriteService;
@@ -30,6 +32,9 @@ class HomeViewModel extends ViewModelAbs<HomeViewModel, HomeState> {
         super(const HomeState.initial()) {
     _init();
   }
+
+  @override
+  FavoriteService get favoriteService => _favoriteService;
 
   ValueNotifier<List<MovieEntity>> get favoriteNotifer =>
       _favoriteService.favoriteNotifier;
@@ -50,11 +55,5 @@ class HomeViewModel extends ViewModelAbs<HomeViewModel, HomeState> {
       _updateLoading(false);
       rethrow;
     }
-  }
-
-  Future<void> addOrRemoveToFavorite(MovieEntity? movieEntity) async {
-    if (movieEntity == null) return;
-
-    return _favoriteService.addOrRemoveToFavorite(movieEntity);
   }
 }

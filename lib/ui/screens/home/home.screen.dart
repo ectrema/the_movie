@@ -9,8 +9,13 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: _MovieScreen(),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('The movie'),
+        centerTitle: true,
+        elevation: 4,
+      ),
+      body: const _MovieScreen(),
     );
   }
 }
@@ -28,7 +33,7 @@ class _MovieScreen extends ConsumerWidget {
         slivers: <Widget>[
           SliverList.builder(
             itemBuilder: (_, int index) {
-              final MovieEntity? item = state.resultEntity?.results[index];
+              final MovieEntity item = state.resultEntity!.results[index];
 
               return Padding(
                 padding:
@@ -39,14 +44,14 @@ class _MovieScreen extends ConsumerWidget {
                     children: <Widget>[
                       SizedBox(
                         height: 150,
-                        child: item?.posterPath != null
+                        child: item.posterPath != null
                             ? ClipRRect(
                                 borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(12),
                                   bottomLeft: Radius.circular(12),
                                 ),
                                 child: Image.network(
-                                  'https://image.tmdb.org/t/p/original/${item!.posterPath}',
+                                  'https://image.tmdb.org/t/p/original/${item.posterPath}',
                                   fit: BoxFit.cover,
                                   errorBuilder: (_, __, ___) => Image.asset(
                                     'assets/images/not_found.jpeg',
@@ -61,14 +66,14 @@ class _MovieScreen extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              item?.title ?? '',
+                              item.title ?? '',
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
                               ),
                             ),
                             Text(
-                              item?.parsedDateTime ?? '',
+                              item.parsedDateTime,
                               style: const TextStyle(
                                 fontWeight: FontWeight.w300,
                                 fontSize: 12,
@@ -77,7 +82,7 @@ class _MovieScreen extends ConsumerWidget {
                             Padding(
                               padding: const EdgeInsets.only(top: 8),
                               child: Text(
-                                item?.overview ?? '',
+                                item.overview ?? '',
                                 maxLines: 4,
                                 overflow: TextOverflow.ellipsis,
                               ),
