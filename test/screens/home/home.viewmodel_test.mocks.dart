@@ -8,6 +8,7 @@ import 'dart:async' as _i5;
 import 'package:flutter/material.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:the_movie/domain/entities/movie.entity.dart' as _i4;
+import 'package:the_movie/domain/services/connectivity.service.dart' as _i6;
 import 'package:the_movie/domain/services/favorite.service.dart' as _i3;
 
 // ignore_for_file: type=lint
@@ -72,4 +73,23 @@ class MockFavoriteService extends _i1.Mock implements _i3.FavoriteService {
         returnValue: _i5.Future<void>.value(),
         returnValueForMissingStub: _i5.Future<void>.value(),
       ) as _i5.Future<void>);
+}
+
+/// A class which mocks [ConnectivityService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockConnectivityService extends _i1.Mock
+    implements _i6.ConnectivityService {
+  @override
+  _i2.ValueNotifier<bool> get isConnected => (super.noSuchMethod(
+        Invocation.getter(#isConnected),
+        returnValue: _FakeValueNotifier_0<bool>(
+          this,
+          Invocation.getter(#isConnected),
+        ),
+        returnValueForMissingStub: _FakeValueNotifier_0<bool>(
+          this,
+          Invocation.getter(#isConnected),
+        ),
+      ) as _i2.ValueNotifier<bool>);
 }

@@ -7,6 +7,7 @@ import 'package:the_movie/domain/entities/movie.entity.dart';
 import 'package:the_movie/domain/entities/result.entity.dart';
 import 'package:the_movie/domain/mixins/favorite.mixin.dart';
 import 'package:the_movie/domain/repository/movie.repository.dart';
+import 'package:the_movie/domain/services/connectivity.service.dart';
 import 'package:the_movie/domain/services/favorite.service.dart';
 import 'package:the_movie/ui/abstraction/view_model_abs.dart';
 import 'package:the_movie/ui/screens/home/home.state.dart';
@@ -17,6 +18,7 @@ final StateNotifierProvider<HomeViewModel, HomeState> homeProvider =
   (StateNotifierProviderRef<HomeViewModel, HomeState> ref) => HomeViewModel(
     movieRepository: injector<MovieRepository>(),
     favoriteService: injector<FavoriteService>(),
+    connectivityService: injector<ConnectivityService>(),
   ),
 );
 
@@ -26,11 +28,15 @@ class HomeViewModel extends ViewModelAbs<HomeViewModel, HomeState>
 
   final FavoriteService _favoriteService;
 
+  final ConnectivityService _connectivityService;
+
   HomeViewModel({
     required MovieRepository movieRepository,
     required FavoriteService favoriteService,
+    required ConnectivityService connectivityService,
   })  : _movieRepository = movieRepository,
         _favoriteService = favoriteService,
+        _connectivityService = connectivityService,
         super(const HomeState.initial()) {
     _init();
   }
@@ -45,7 +51,23 @@ class HomeViewModel extends ViewModelAbs<HomeViewModel, HomeState>
     state = state.copyWith(loading: value);
   }
 
-  Future<void> _init() async {
+  bool get isConnected => _connectivityService.isConnected.value;
+
+  void _init() {
+    if (_connectivityService.isConnected.value) {
+      _loadData();
+    } else {
+      _connectivityService.isConnected.addListener(() {
+        if (_connectivityService.isConnected.value == true &&
+            state.resultEntity == null) {
+          _loadData();
+        }
+      });
+      _updateLoading(false);
+    }
+  }
+
+  Future<void> _loadData() async {
     unawaited(_favoriteService.init());
     if (!state.loading) _updateLoading(true);
 

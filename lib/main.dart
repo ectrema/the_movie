@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:the_movie/application/injections/initializer.dart';
 import 'package:the_movie/ui/screens/main.screen.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  initializeInjections();
+  await initializeInjections();
   runApp(const ProviderScope(child: MyApp()));
 }
 

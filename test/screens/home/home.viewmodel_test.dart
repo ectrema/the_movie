@@ -1,8 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 import 'package:the_movie/domain/entities/movie.entity.dart';
 import 'package:the_movie/domain/entities/result.entity.dart';
+import 'package:the_movie/domain/services/connectivity.service.dart';
 import 'package:the_movie/domain/services/favorite.service.dart';
 import 'package:the_movie/ui/screens/home/home.viewmodel.dart';
 
@@ -12,20 +14,26 @@ import 'home.viewmodel_test.mocks.dart';
 @GenerateNiceMocks(
   <MockSpec<dynamic>>[
     MockSpec<FavoriteService>(),
+    MockSpec<ConnectivityService>(),
   ],
 )
 void main() {
   group('HomeViewModel', () {
     late MockMovieRepository mockMovieRepository;
     late MockFavoriteService mockFavoriteService;
+    late MockConnectivityService mockConnectivityService;
     late HomeViewModel viewModel;
 
     setUp(() {
       mockMovieRepository = MockMovieRepository();
       mockFavoriteService = MockFavoriteService();
+      mockConnectivityService = MockConnectivityService();
+      when(mockConnectivityService.isConnected)
+          .thenReturn(ValueNotifier<bool>(true));
       viewModel = HomeViewModel(
         movieRepository: mockMovieRepository,
         favoriteService: mockFavoriteService,
+        connectivityService: mockConnectivityService,
       );
     });
 

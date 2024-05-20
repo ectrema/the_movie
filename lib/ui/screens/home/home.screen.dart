@@ -30,28 +30,42 @@ class _MovieScreen extends ConsumerWidget {
     final HomeViewModel viewModel = ref.watch(homeProvider.notifier);
 
     return SafeArea(
-      child: CustomScrollView(
-        slivers: <Widget>[
-          SliverList.builder(
-            itemBuilder: (_, int index) {
-              final MovieEntity item = state.resultEntity!.results[index];
+      child: viewModel.isConnected
+          ? CustomScrollView(
+              slivers: <Widget>[
+                SliverList.builder(
+                  itemBuilder: (_, int index) {
+                    final MovieEntity item = state.resultEntity!.results[index];
 
-              return MovieWidget(
-                item: item,
-                onFavoriteTap: () => viewModel.addOrRemoveToFavorite(item),
-                favoriteNotifer: viewModel.favoriteNotifer,
-              );
-            },
-            itemCount: state.resultEntity?.results.length ?? 0,
-          ),
-          if (state.loading)
-            const SliverFillRemaining(
-              child: Center(
-                child: CircularProgressIndicator(),
+                    return MovieWidget(
+                      item: item,
+                      onFavoriteTap: () =>
+                          viewModel.addOrRemoveToFavorite(item),
+                      favoriteNotifer: viewModel.favoriteNotifer,
+                    );
+                  },
+                  itemCount: state.resultEntity?.results.length ?? 0,
+                ),
+                if (state.loading)
+                  const SliverFillRemaining(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+              ],
+            )
+          : const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Icon(
+                    Icons.network_check,
+                    size: 38,
+                  ),
+                  Text('No internet connection'),
+                ],
               ),
             ),
-        ],
-      ),
     );
   }
 }
