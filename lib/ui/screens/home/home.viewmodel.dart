@@ -1,7 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:the_movie/application/injections/initializer.dart';
+import 'package:the_movie/domain/entities/movie.entity.dart';
 import 'package:the_movie/domain/entities/result.entity.dart';
 import 'package:the_movie/domain/repository/movie.repository.dart';
+import 'package:the_movie/domain/services/favorite.service.dart';
 import 'package:the_movie/ui/abstraction/view_model_abs.dart';
 import 'package:the_movie/ui/screens/home/home.state.dart';
 
@@ -10,17 +13,26 @@ final StateNotifierProvider<HomeViewModel, HomeState> homeProvider =
     StateNotifierProvider<HomeViewModel, HomeState>(
   (StateNotifierProviderRef<HomeViewModel, HomeState> ref) => HomeViewModel(
     movieRepository: injector<MovieRepository>(),
+    favoriteService: injector<FavoriteService>(),
   ),
 );
 
 class HomeViewModel extends ViewModelAbs<HomeViewModel, HomeState> {
   final MovieRepository _movieRepository;
 
-  HomeViewModel({required MovieRepository movieRepository})
-      : _movieRepository = movieRepository,
+  final FavoriteService _favoriteService;
+
+  HomeViewModel({
+    required MovieRepository movieRepository,
+    required FavoriteService favoriteService,
+  })  : _movieRepository = movieRepository,
+        _favoriteService = favoriteService,
         super(const HomeState.initial()) {
     _init();
   }
+
+  ValueNotifier<List<MovieEntity>> get favoriteNotifer =>
+      _favoriteService.favoriteNotifier;
 
   void _updateLoading(bool value) {
     state = state.copyWith(loading: value);
@@ -38,5 +50,11 @@ class HomeViewModel extends ViewModelAbs<HomeViewModel, HomeState> {
       _updateLoading(false);
       rethrow;
     }
+  }
+
+  Future<void> addOrRemoveToFavorite(MovieEntity? movieEntity) async {
+    if (movieEntity == null) return;
+
+    return _favoriteService.addOrRemoveToFavorite(movieEntity);
   }
 }

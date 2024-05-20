@@ -21,6 +21,7 @@ class _MovieScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final HomeState state = ref.watch(homeProvider);
+    final HomeViewModel viewModel = ref.watch(homeProvider.notifier);
 
     return SafeArea(
       child: CustomScrollView(
@@ -55,7 +56,7 @@ class _MovieScreen extends ConsumerWidget {
                             : null,
                       ),
                       const SizedBox(width: 12),
-                      Flexible(
+                      Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -83,6 +84,20 @@ class _MovieScreen extends ConsumerWidget {
                             ),
                           ],
                         ),
+                      ),
+                      IconButton(
+                        icon: ValueListenableBuilder<List<MovieEntity>>(
+                          valueListenable: viewModel.favoriteNotifer,
+                          builder: (_, List<MovieEntity> value, __) {
+                            return Icon(
+                              value.contains(item)
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              color: Colors.red,
+                            );
+                          },
+                        ),
+                        onPressed: () => viewModel.addOrRemoveToFavorite(item),
                       ),
                     ],
                   ),

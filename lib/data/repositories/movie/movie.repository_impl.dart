@@ -16,4 +16,9 @@ class MovieRepositoryImpl implements MovieRepository {
     final ResultModel model = await _movieRemoteDataSource.getMovie();
     return model.toEntity;
   }
+
+  @override
+  Future<void> addToFavorite(bool favorite, int mediaId) {
+    return _movieRemoteDataSource.addToFavorite(favorite, mediaId);
+  }
 }
