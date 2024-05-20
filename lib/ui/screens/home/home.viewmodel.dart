@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:the_movie/application/injections/initializer.dart';
@@ -44,16 +46,17 @@ class HomeViewModel extends ViewModelAbs<HomeViewModel, HomeState>
   }
 
   Future<void> _init() async {
+    unawaited(_favoriteService.init());
     if (!state.loading) _updateLoading(true);
 
     try {
       final ResultEntity result = await _movieRepository.getMovie();
 
-      state = state.copyWith(resultEntity: result);
-      _updateLoading(false);
+      state = state.copyWith(resultEntity: result, loading: false);
     } catch (e) {
       _updateLoading(false);
-      rethrow;
+
+      throw Exception('Failed to load movies');
     }
   }
 }

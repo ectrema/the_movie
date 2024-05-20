@@ -14,17 +14,15 @@ class FavoriteService {
 
   FavoriteService({required MovieRepository movieRepository})
       : _movieRepository = movieRepository,
-        _currentFavorite = ValueNotifier<List<MovieEntity>>(<MovieEntity>[]) {
-    _init();
-  }
+        _currentFavorite = ValueNotifier<List<MovieEntity>>(<MovieEntity>[]);
 
-  Future<void> _init() async {
+  Future<void> init() async {
     try {
       final ResultEntity result = await _movieRepository.getFavoriteMovie();
 
       _currentFavorite.value = <MovieEntity>[...result.results];
     } catch (e) {
-      rethrow;
+      throw Exception('Failed to load initial favorite movies');
     }
   }
 
@@ -54,7 +52,7 @@ class FavoriteService {
         ];
       }
     } catch (e) {
-      rethrow;
+      throw Exception('Failed to add or remove movies');
     }
   }
 }

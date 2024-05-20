@@ -53,6 +53,9 @@ class MovieEntity with EquatableMixin {
 
 extension OnMovieEntity on MovieEntity {
   String get parsedDateTime {
-    return DateFormat.yMMMMd().format(DateTime.parse(releaseDate ?? ''));
+    final DateTime? parsedTime = DateTime.tryParse(releaseDate ?? '');
+
+    if (parsedTime == null) return '';
+    return DateFormat.yMMMMd().format(parsedTime);
   }
 }
