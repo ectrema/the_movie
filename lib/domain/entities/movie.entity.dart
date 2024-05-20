@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:intl/intl.dart';
 
 class MovieEntity with EquatableMixin {
   final bool? adult;
@@ -50,4 +51,10 @@ class MovieEntity with EquatableMixin {
         voteAverage,
         voteCount,
       ];
+}
+
+extension OnMovieEntity on MovieEntity {
+  String get parsedDateTime {
+    return DateFormat.yMMMMd().format(DateTime.parse(releaseDate ?? ''));
+  }
 }

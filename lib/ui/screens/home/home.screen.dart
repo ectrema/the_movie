@@ -31,26 +31,57 @@ class _MovieScreen extends ConsumerWidget {
 
               return Padding(
                 padding:
-                    const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
                 child: Card(
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       SizedBox(
                         height: 150,
                         child: item?.posterPath != null
-                            ? Image.network(
-                                'https://image.tmdb.org/t/p/original/${item!.posterPath}',
-                                fit: BoxFit.cover,
-                                errorBuilder: (_, __, ___) => Image.asset(
-                                  'assets/images/not_found.jpeg',
+                            ? ClipRRect(
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(12),
+                                  bottomLeft: Radius.circular(12),
+                                ),
+                                child: Image.network(
+                                  'https://image.tmdb.org/t/p/original/${item!.posterPath}',
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (_, __, ___) => Image.asset(
+                                    'assets/images/not_found.jpeg',
+                                  ),
                                 ),
                               )
                             : null,
                       ),
-                      Expanded(
-                        child: Text(
-                          item?.title ?? '',
-                          textAlign: TextAlign.center,
+                      const SizedBox(width: 12),
+                      Flexible(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              item?.title ?? '',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                            Text(
+                              item?.parsedDateTime ?? '',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w300,
+                                fontSize: 12,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8),
+                              child: Text(
+                                item?.overview ?? '',
+                                maxLines: 4,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
